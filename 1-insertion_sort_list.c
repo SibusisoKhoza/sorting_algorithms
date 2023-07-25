@@ -1,58 +1,52 @@
 #include "sort.h"
 
+/**
+ * swap_nodes - Swap two nodes in a listint_t doubly-linked list.
+ * @h: A pointer to the head of the doubly-linked list.
+ * @n1: A pointer to the first node to swap.
+ * @n2: The second node to swap.
+ */
+void swap_nodes(listint_t **h, listint_t **n1, listint_t *n2)
+{
+	(*n1)->next = n2->next;
+	if (n2->next != NULL)
+		n2->next->prev = *n1;
+	n2->prev = (*n1)->prev;
+	n2->next = *n1;
+	if ((*n1)->prev != NULL)
+		(*n1)->prev->next = n2;
+	else
+		*h = n2;
+	(*n1)->prev = n2;
+	*n1 = n2->prev;
+}
+
+
 
 /**
- * insertion_sort_list - implementation insertion_sort algorithm
+ * insertion_sort_list - sorts a doubly linked list of
+ * integers in ascending order
+ * @list: A pointer to the head of the doubly linked list
  *
- * @list: input linked list
- * You are not allowed to modify the integer n of a node.
- * You have to swap the nodes themselves.
- * You’re expected to print the list 
- * after each time you swap two elements
- *
- * Return: FUNCTION DO NOT RETURN
  */
 void insertion_sort_list(listint_t **list)
 {
-	size_t len, itr;
-	int key;
-	listint_t *in_lst, *curnt, *curs, *prev, *head;
+	listint_t *iter, *insert, *tmp;
 
-	len = 0;
-	curnt = *list;
-	head = *list;
-	while(curnt)
-	{
-		len++;
-		curnt = curnt->next;
-	}
-	printf("LIST LEN = %ld\n",len);
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
+		return;
 
-	for (itr = 1; itr < len; itr++)
+	for (iter = (*list)->next; iter != NULL; iter = tmp)
 	{
-		key = curnt->n;
-		printf("KEY IS %d", key);
-		prev = curnt->prev;
-		while (prev != NULL && prev->n > key)
+		tmp = iter->next;
+		insert = iter->prev;
+		while (insert != NULL && iter->n < insert->n)
 		{
-			curs = prev->prev;
-			if (prev->prev)
-					prev->prev->next = curnt;
-			else
-				head = curnt;
-			if (curnt->next)
-			{
-				curnt->next->prev = prev;
-			}
-			prev->next = curnt->next;
-			curnt->prev = prev->prev;
-			prev->prev = curnt;
-			curnt->next = prev;
-			
-
-			prev = curs;
-			print_list(head);
+			swap_nodes(list, &insert, iter);
+			print_list((const listint_t *)*list);
 		}
+
 	}
-	*list = head;
+
+
 }

@@ -1,31 +1,47 @@
 #include "sort.h"
 
+/**
+ * swap - Swap values of start and next index.
+ * @array: the array with start and next values.
+ * @start: start point of the array.
+ * @next: next point of the array.
+ * Return: nothing.
+ */
+void swap(int *array, size_t start, size_t next)
+{
+	size_t temporary = array[next];
+	
+
+	array[next] = array[start];
+	array[start] = temporary;
+}
 
 /**
- * bubble_sort - implementation bubble sort algorithm
- *
- * @array: input array
- * @size: size of the array
- *
- * Return: FUNCTION DO NOT RETURN
+ * bubble_sort - Sort an array with bubble algorithm.
+ * @array: the array to sort.
+ * @size: size of the array.
+ * Return: nothing
  */
 void bubble_sort(int *array, size_t size)
 {
-	size_t o_itr, i_itr;
-	int tmp;
+	size_t start = 0;
+	size_t next = 0;
 
-	for (o_itr = 0; o_itr < size; o_itr++)
+	if (!array || size < 2)
+		return;
+
+	while (start < size)
 	{
-		for (i_itr = 0; i_itr < size - 1; i_itr++)
+		next = 0;
+		while (next < size - 1)
 		{
-			if (array[i_itr] > array[i_itr + 1])
+			if (array[next] > array[next + 1])
 			{
-				tmp = array[i_itr];
-				array[i_itr] = array[i_itr + 1];
-				array[i_itr + 1] = tmp;
+				swap(array, next, next + 1);
 				print_array(array, size);
 			}
+			next++;
 		}
+		start++;
 	}
-
 }
