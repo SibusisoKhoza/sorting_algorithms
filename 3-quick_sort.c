@@ -1,85 +1,74 @@
 #include "sort.h"
 
-/**
- * quick_sort - sorts an array of integers in asc order
- *
- * @array: array of integers
- * @size: size of the array
- */
-void quick_sort(int *array, size_t size)
-{
-	if (array != NULL && size > 1)
-		sort(array, 0, size - 1, size);
-}
 
 /**
- * sort - sort partitioned array
- *
- * @array: pointer to array to be sorted
- * @start: start of array (left side of array)
- * @end: end of array(right side of array)
- * @size: size of array
+ * partition - sort an array of integers using quick_sort
+ *		lomuto implementation with pivot in last element of partition
+ * @array: array to sort
+ * @min: minimum value
+ * @max: max value
+ * @size: the size of the array to sort
+ * Return: index + 1
  */
-void sort(int *array, size_t start, size_t end, size_t size)
+size_t partition(int *array, ssize_t min, ssize_t max, size_t size)
 {
-	size_t pindex;
+	ssize_t i, j;
+	int swap, pivot;
 
-	if (end > 0 && end > start)
+	pivot = array[max];
+	i = min - 1;
+	for (j = min; j < max; j++)
 	{
-		pindex = partition(array, start, end, size);
-		if (pindex != 0 && pindex > start)
-			sort(array, start, pindex - 1, size);
-		if (pindex < size - 1)
-			sort(array, pindex + 1, end, size);
-	}
-}
-
-/**
- * partition - create a partition in an array for quick sort
- *
- * @array: pointer to array to be partitioned
- * @start: start of array to be partitioned
- * @end: end of the array to be partitioned, used as pivot
- * @size: size of array to be partitioned
- *
- * Return: partition array
- */
-size_t partition(int *array, size_t start, size_t end, size_t size)
-{
-	size_t count;
-
-	for (count = start; count < end; count++)
-	{
-		if (array[count] < array[end])
+		if (array[j] < pivot)
 		{
-			if (count != start)
+			i++;
+			if (i != j)
 			{
-				swap(&array[start], &array[count]);
+				swap = array[i];
+				array[i] = array[j];
+				array[j] = swap;
 				print_array(array, size);
 			}
-			start++;
 		}
 	}
-	if (array[start] > array[end])
+	if (array[max] < array[i + 1])
 	{
-		swap(&array[start], &array[end]);
-		end = start;
+		swap = array[i + 1];
+		array[i + 1] = array[max];
+		array[max] = swap;
 		print_array(array, size);
 	}
-	return (end);
+	return (i + 1);
 }
 
 /**
- * swap - swap values on arrays
- *
- * @a: pointer to array
- * @b: pointer to array
- */
-void swap(int *a, int *b)
+* quicksort - sorts an array (a partition recursively)
+* @array: array to be sorted
+* @min: min index of the partition
+* @max: max index of the partition
+* @size: array size
+*/
+void quicksort(int *array, ssize_t min, ssize_t max, size_t size)
 {
-	int temp = 0;
+	ssize_t pivot;
 
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	if (min < max)
+	{
+		pivot = partition(array, min, max, size);
+		quicksort(array, min, pivot - 1, size);
+		quicksort(array, pivot + 1, max, size);
+
+	}
+}
+
+/**
+* quick_sort - sorts an array with quick sort algo
+* @array: The array to be sorted
+* @size: The size of the array to be sorted
+*/
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL || size < 2)
+		return;
+	quicksort(array, 0, size - 1, size);
 }

@@ -1,61 +1,62 @@
 #include "sort.h"
 
-/**
- * swapme - swap the nodes themselves.
- * @current: pointer.
- * @current_old: pointer.
- * @list: doubly linked list
- */
-void swapme(listint_t *current, listint_t *current_old, listint_t **list)
-{
-	listint_t *temp1 = current->next;
-	listint_t *temp2 = current_old->prev;
-
-	if (temp1 != NULL)
-		temp1->prev = current_old;
-	if (temp2 != NULL)
-		temp2->next = current;
-	current->prev = temp2;
-	current_old->next = temp1;
-	current->next = current_old;
-	current_old->prev = current;
-	if (*list == current_old)
-		*list = current;
-	print_list(*list);
-}
+void move_left(listint_t *curr, listint_t *prev, listint_t **head);
 
 /**
- * cocktail_sort_list - cocktail_sort_list
- *
- * @list: doubly linked list
- */
+* cocktail_sort_list - coctail sort in doubly linked list
+* @list: A Doubly linked list
+*/
+
 void cocktail_sort_list(listint_t **list)
 {
-	listint_t *check = *list, *first = NULL, *last = NULL;
+	listint_t *cur;
+	listint_t *max = NULL;
+	listint_t *min = NULL;
 
-	if (!list)
+	if (!list || !(*list) || (*list)->next == NULL)
 		return;
-	if (!(*list))
-		return;
-	if (!(*list)->next)
-		return;
+	cur = *list;
 	do {
-		while (check->next)
+		while (cur->next)
 		{
-			if (check->n > check->next->n)
-				swapme(check->next, check, list);
+			if (cur->n > cur->next->n)
+				move_left(cur->next, cur, list);
 			else
-				check = check->next;
+				cur = cur->next;
 		}
-		last = check;
-		while (check->prev != first)
+		max = cur;
+		while (cur->prev != min)
 		{
-			if (check->n < check->prev->n)
-				swapme(check, check->prev, list);
+			if (cur->n < cur->prev->n)
+				move_left(cur, cur->prev, list);
 			else
-				check = check->prev;
+				cur = cur->prev;
 		}
-		first = check;
-	} while (first != last);
+		min = cur;
+	} while (min != max);
 }
 
+/**
+* move_left - swaps two members of a list
+*
+* @curr: current node
+* @prev: previous node
+* @head: head of list
+*/
+void move_left(listint_t *curr, listint_t *prev, listint_t **head)
+{
+	listint_t *swap1 = curr->next;
+	listint_t *swap2 = prev->prev;
+
+	if (swap1 != NULL)
+		swap1->prev = prev;
+	if (swap2 != NULL)
+		swap2->next = curr;
+	curr->prev = swap2;
+	prev->next = swap1;
+	curr->next = prev;
+	prev->prev = curr;
+	if (*head == prev)
+		*head = curr;
+	print_list(*head);
+}

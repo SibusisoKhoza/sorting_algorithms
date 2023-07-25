@@ -1,35 +1,37 @@
 #include "sort.h"
-
 /**
- * selection_sort - sorts an array of integers in asc order
+ * selection_sort - sort an array of integers using selection sort
  *
- * @array: array of integers
- * @size: size of the array
+ * @array: the array to order
+ * @size: the siz of the array to order
  */
 void selection_sort(int *array, size_t size)
 {
-	size_t i;
-	size_t j;
-	size_t min = 0;
-	int swap;
+	unsigned long int i = 0, j = 0, smallest = 0;
+	int *swap = NULL;
 
-	if (size > 0 && array != NULL)
+	if (!array || size < 2)
+		return;
+	for (; i < size; i++)
 	{
-		for (i = 0; i < size - 1; i++)
+		smallest = i; /* set current as minimum */
+		swap =  malloc(sizeof(int) * 1);
+		*swap = *(array + i);
+		for (j = i + 1; j < size; j++)
 		{
-			min = i;
-			for (j = i + 1; j < size; j++)
+			if (*(array + j) < *(array + smallest))
 			{
-				if (array[min] > array[j])
-					min = j;
-			}
-			swap = array[min];
-			array[min] = array[i];
-			if (array[i] != swap)
-			{
-				array[i] = swap;
-				print_array(array, size);
+				smallest = j; /* update minimum index*/
 			}
 		}
+		if (i < smallest)
+		{
+		*(array + i) = *(array + smallest);
+		*(array + smallest) = *swap;
+		free(swap);
+		print_array(array, size);
+		}
+		else
+			free(swap);
 	}
 }
