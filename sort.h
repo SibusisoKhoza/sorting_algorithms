@@ -29,4 +29,8 @@ void sort(int *array, size_t start, size_t end, size_t size);
 size_t partition(int *array, size_t start, size_t end, size_t size);
 void swap(int *a, int *b);
 
+<<<<<<< HEAD
 #endif /* SORT_H */
+=======
+#endif
+>>>>>>> parent of f0dfb48 (UPdate)
